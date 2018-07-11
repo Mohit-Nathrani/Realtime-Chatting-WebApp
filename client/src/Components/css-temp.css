@@ -1,0 +1,13 @@
+.chat .chat-history .message:after {
+  bottom: 95%;
+  left: 7%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: #86BB71;
+  border-width: 10px;
+  margin-left: -20px;
+}

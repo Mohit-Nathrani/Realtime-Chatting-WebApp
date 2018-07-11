@@ -1,0 +1,284 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,700);
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  background: #C5DDEB;
+  font: 14px/20px "Lato", Arial, sans-serif;
+  padding: 5px 0; 
+  color: white;
+}
+
+
+.line{
+  border-bottom: 2px solid gray;
+}
+
+.container {
+  margin: 0 auto;
+  width: 500px;
+  background: #444753;
+  border-radius: 10px;
+}
+
+.people-list{
+  min-height: 610px;
+  height:100%;
+  overflow:auto;
+}
+
+.people-list ul li {
+  padding-bottom: 20px;
+}
+.people-list img {
+  float: left;
+}
+.people-list .about {
+  float: left;
+  margin-top: 8px;
+}
+.people-list .about {
+  padding-left: 8px;
+}
+.people-list .status {
+  color: #92959E;
+}
+
+.mybox{
+  margin: 0 auto;
+  width: 500px;
+  border-radius: 10px;
+}
+
+.chat {
+  padding-bottom: 120px;
+}
+
+.chat-header {
+  padding: 10px;
+  color: #434651;
+  border-bottom: 2px solid white;
+}
+
+.chat-header img {
+  float: left;
+}
+
+.chat-header .chat-about {
+  float: left;
+  padding-left: 10px;
+  margin-top: 5px;
+}
+
+.chat-header .chat-with {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.chat-num-messages {
+  color: #92959E;
+}
+
+.chat-history {
+  padding: 30px 30px;
+  margin-top: 45px;
+  min-height: 390px;
+  background-color: #F2F5F8;
+}
+
+.message-data {
+  margin-bottom: 5px;
+}
+
+.message-data-time {
+  color: #a8aab1;
+  padding-left: 6px;
+  font-size: 10px
+}
+
+.message-data-name {
+  color: black;
+  padding-left: 6px;
+  font-size: 12px
+}
+.message {
+  color: white;
+  padding: 8px 12px;
+  line-height: 26px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 7px;
+  margin-bottom: 5px;
+  max-width: 80%;
+  position: relative;
+}
+
+.other-message {
+  background: #86BB71;
+}
+
+.my-message {
+  background: #94C2ED;
+}
+
+.my-message:after {
+  border-bottom-color: #94C2ED;
+  left: 93%;
+}
+
+.chat-message {
+  padding: 8px;
+  border-top: 2px solid white;
+}
+
+textarea {
+  width: 100%;
+  border: none;
+  padding: 10px 20px;
+  font: 14px/22px "Lato", Arial, sans-serif;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  resize: none;
+}
+
+.chat-message button {
+  float: right;
+  color: #94C2ED;
+  font-size: 16px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #F2F5F8;
+}
+.chat .chat-message button:hover {
+  color: #75b1e8;
+}
+
+.online, .offline, .me {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+.online {
+  color: #86BB71;
+}
+
+.offline {
+  color: #E38968;
+}
+
+.me {
+  color: #94C2ED;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+.tabs{
+  float: right;
+}
+
+.checkmark {
+  font-family: arial;
+  -ms-transform: scaleX(-1) rotate(-35deg); /* IE 9 */
+  -webkit-transform: scaleX(-1) rotate(-35deg); /* Chrome, Safari, Opera */
+  transform: scaleX(-1) rotate(-35deg);
+}
+
+.unseen{
+  color: #86BB71;
+  font-size: 15px;
+  background-color: #fff;
+  shape-outside: ellipse();
+}
+
+.badge {
+  background-color:#86BB71; 
+  color:#fff; 
+  border:.2em solid;
+  border-color: #fff;
+  border-radius:50px;
+  font-size:1.1em;
+  padding:8px 8px 8px 8px;
+  margin:8px;
+  cursor: default;
+}
+
+.green{
+  color: #86BB71;
+}
+
+.padding{
+  margin: 8px;
+}
+
+.button2{ 
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.colorme{
+  background: #444753;
+}
+.color2{
+  background: #F2F5F8;
+  color: black;
+}
+.colorback{
+  color: #C5DDEB;
+}
+
+.topper {
+  position: fixed;
+  top: 0;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;  
+}
+
+.form-pad{
+  padding-bottom: 15px;
+}
+
+.holder{
+    margin: 0;
+    min-height: 100%;
+    display: -ms-flexbox; /* IE 10 */
+    display: -webkit-flex; /* Safari */
+    display: flex;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.content{
+  height: 80%;
+}
