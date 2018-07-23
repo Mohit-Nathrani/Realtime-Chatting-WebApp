@@ -173,7 +173,7 @@ export default class Room extends Component {
         <div className="holder">
           <div className="chat"> 
             <div className="chat-header clearfix w3-top w3-col l5 color2">
-              <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" /> 
+              <img src="https://i.imgur.com/luIlHki.png" alt="avatar" /> 
               <div className="chat-about">
                 <div className="chat-with">{this.state.otherUser}</div>
                 <div className="align-left">

@@ -112,7 +112,7 @@ export default class Rooms extends Component {
 						            {
 						            	this.state.rooms.map(room =>
 						                <li key={room._id} className="clearfix line"  onClick={(e)=> this.handleClick(e,room._id)}>
-						                  <RoomDesign notif_condition={(room.not_readed_by===this.state.req_by_id) && (room.not_readed_msg.length>0)} unseen={room.not_readed_msg.length} avatar="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01.jpg" from={(room.user1_name!==this.state.name)?(room.user1_name):(room.user2_name)} lastmsg={room.lastmsg} line="offline" />
+						                  <RoomDesign notif_condition={(room.not_readed_by===this.state.req_by_id) && (room.not_readed_msg.length>0)} unseen={room.not_readed_msg.length} avatar="https://i.imgur.com/luIlHki.png" from={(room.user1_name!==this.state.name)?(room.user1_name):(room.user2_name)} lastmsg={room.lastmsg} line="offline" />
 						                </li>)
 						            }    
 						            </ul>

@@ -212,19 +212,24 @@ io.on('connection',function(socket){
 	        	// if everything is good
 	        	Room.findById(data.room_id)
 				.then((room)=>{
-					var details = {
-						user1_id:room.user1,
-						user2_id:room.user2,
-						user1_name:room.user1_name,
-						user2_name:room.user2_name,
-						msg:[]
-					};
-					Message.find({_id:{ $in: room.messages }})
-					.then(msgs=>{
-						details.msg=msgs;
-						result({success:true,details:details,req_by:decoded._id});
-					})
-					.catch(err=>result({success:false,error:err}))
+						if(room.user1==decoded._id || room.user2==decoded._id){
+						var details = {
+							user1_id:room.user1,
+							user2_id:room.user2,
+							user1_name:room.user1_name,
+							user2_name:room.user2_name,
+							msg:[]
+						};
+						Message.find({_id:{ $in: room.messages }})
+						.then(msgs=>{
+							details.msg=msgs;
+							result({success:true,details:details,req_by:decoded._id});
+						})
+						.catch(err=>result({success:false,error:err}))
+					}
+					else{
+						result({success:false,error:'you can not access this resource'});
+					}
 				})
 				.catch((err)=> result({success:false,error:err}));
 	    	}
