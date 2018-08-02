@@ -30,8 +30,14 @@ app.get('/check',function(req,res){
 	//console.log('accessing homepage');
 	res.send({success:true});
 });
+ 
 
-//route to register a new user(POST http://localhost:4000/signup)
+/*
+Route responsible for registering a new user
+Possibilities:
+	1. Handle already taken
+	2. Success
+*/
 app.post('/signup', function(req, res,next) {
   var name = req.body.name;
   var password = req.body.password;
@@ -40,9 +46,12 @@ app.post('/signup', function(req, res,next) {
     res.send({success:false,errors:'empty fields are not allowed'});
   }
   else{
-  	User.find({name:name})
+  	User.findOne({name:name})
   	.then(user=>{
-  		if(user==''){
+  		if(user){
+  			res.send({success:false,errors:'Sorry! Name already taken.'});
+  		}
+  		else{
   			var newUser = new User({
 		    	name : name,
 		    	password : password
@@ -56,15 +65,19 @@ app.post('/signup', function(req, res,next) {
 		        }
 		    });
   		}
-  		else{
-	  		res.send({success:false,errors:'Sorry! Name already taken.'})
-  		}
   	});
   	}
 });
 
 
-// route to authenticate a user (POST http://localhost:4000/authenticate)
+/*
+Route resposible for authenticating a user
+and providing him a token to maintain session
+Possibilities:
+	1. User not found in database.
+	2. Wrong Password.
+	3. Succeess
+*/
 app.post('/authenticate', function(req, res,next) {
   // find the user
   User.findOne({name: req.body.name}, function(err, user) {
@@ -89,6 +102,14 @@ app.post('/authenticate', function(req, res,next) {
   });
 });
 
+
+/*
+Route responsible for creating a room between two users.
+Possibilities:
+	1. No User Found.
+	2. can't create room with yourself
+	3. Success
+*/
 app.post('/create_room', function(req, res,next) {
   	var name = req.body.to;
   	var token = req.body.token;
@@ -134,8 +155,6 @@ var server = app.listen(port,function(){
 });
 
 
-
-
 //socket setup
 var io = socket(server);
 
@@ -143,6 +162,10 @@ io.on('connection',function(socket){
 	const _id = socket.id;
 	//console.log('CONNECTING: '+_id);
 	
+	/*
+		Called when a client will connect
+		so, updating his status as online
+	*/
 	socket.on('set:me:online',function(data){
 		jwt.verify(data.token, app.get('superSecret'), function(err, decoded) {
 	    	if (err) {
@@ -159,6 +182,9 @@ io.on('connection',function(socket){
 	    });		
 	});
 
+
+	
+	//Called when client wants to know status of another client  
 	socket.on('get:line:status',function(data,result){
 		//console.log('LINE_STATUS: sending lineStatus of '+data.id);
 		User.findById(data.id)
@@ -171,6 +197,7 @@ io.on('connection',function(socket){
 		.catch();
 	});
 
+	//Responsible for providing all the rooms of a client
 	socket.on('get:Rooms',function(data,result){
 		//console.log('ROOMS :'+_id+ ' accessing its rooms');
 		
@@ -190,6 +217,7 @@ io.on('connection',function(socket){
 	    });
 	});
 
+
 	socket.on('joining:room',function(data){
 		//console.log('JOINING: '+_id +' joining room '+data.room_id);
 		socket.join(data.room_id);
@@ -200,6 +228,8 @@ io.on('connection',function(socket){
 		socket.leave(data.room_id);
 	});
 
+	//Responsible for sending all messages of a particular room
+	//will also verify whether user has access of room requested 
 	socket.on('get:room:messages',function(data,result){
 		//console.log('ROOM: '+_id+' is accesssing messages of room: '+ data.room_id);
 		
@@ -209,7 +239,7 @@ io.on('connection',function(socket){
 	       		result({success: false});
 	      	}
 	      	else {
-	        	// if everything is good
+	        	// if token is correct
 	        	Room.findById(data.room_id)
 				.then((room)=>{
 						if(room.user1==decoded._id || room.user2==decoded._id){
@@ -236,7 +266,8 @@ io.on('connection',function(socket){
 	    });	
 	});
 
-	
+	//Called when a client enters a room and hence confirming that
+	//now no message is remaing unseen for him 
 	socket.on('send:seen:all:status',function(data){
 		jwt.verify(data.token, app.get('superSecret'), function(err, decoded) {
 	    	if (err) {
@@ -263,6 +294,12 @@ io.on('connection',function(socket){
 		});
 	});
 
+	/*
+		called whenever client gets broadcasted message
+		and since there can be only two users in a room
+		we can conclude that both users are present in room
+		so we can safely assume not_readed_msg for this room as empty array 
+	*/
 	socket.on('send:seen:one:status',function(data){
 		jwt.verify(data.token, app.get('superSecret'), function(err, decoded) {
 	    	if (err) {
@@ -281,16 +318,27 @@ io.on('connection',function(socket){
 		});
 	});
 
+	/*
+		broadcasting the typing:start status to other user if he is present in the room
+	*/
 	socket.on('typing:started',function(data){
 		//TODO: verify is user allowed to broadcast in this room 
 		socket.broadcast.to(data.room_id).emit('typing:started:status',{data:'TODO: id of sender'});
 
 	});
+	/*
+		broadcasting the typing:stop status to other user if he is present in the room
+	*/
 	socket.on('typing:stopped',function(data){
 		socket.broadcast.to(data.room_id).emit('typing:stopped:status',{data:'TODO: id of sender'});
 	});
 
 
+
+	/*
+		simply because client already having his sent message
+		server will only send this message to other user(broadcasting)
+	*/
 	socket.on('send:room:message',function(data){
 		//console.log('NEW_MESSAGE: '+ _id+ 'sending msg('+data.newmsg+') to room->'+data.room_id);
 		Message.create({'from':data.from,'to':data.to,'msg':data.newmsg,last_change:Date.now})
@@ -304,17 +352,11 @@ io.on('connection',function(socket){
 
 	});
 
-	//TODO:typing
-
-	//to check whether user is online or not
+	//to set user as offline
 	socket.on('disconnect',()=>{
 		//console.log('DISCONNECTING: '+_id);
   		socket.broadcast.to('line:status:'+socket.userid).emit('line:status',{type:'Offline'});
   		User.findByIdAndUpdate(socket.userid,{is_online:false})
 	    .then().catch();
 	});
-
-	//temps:
-	//socket.broadcast.emit('get:message',success:true,newdata:newdata);
-
 });
